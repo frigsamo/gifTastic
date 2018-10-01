@@ -12,16 +12,24 @@ var imges = "";
 limit = "&limit=10";
 
 $(function () {
+
+
+
     animalButton = (array) => {
         array.forEach(element => {
-            button = $("<button class='btn btn-primary'" + "id=" + element + ">" + element + "</button>");
+            button = $("<button class='btn btn-primary animalButtonClass'" + "id=" + element + ">" + element + "</button>");
             $('#buttonsPosition').append(button);
         });
     }
     animalButton(animals);
     
 
-    $("button").on('click', function () {       
+    $(".animalButtonClass").on('click', function () { 
+        time();  
+        urlList = []; 
+        urlStaticList = [];  
+        url = "";
+        urlStatic = ""; 
         query = $(this).attr('id');
         $(".imagesPosition").empty();
             $.ajax({
@@ -45,20 +53,23 @@ $(function () {
            
         });
     });
-    
-    setTimeout(function(){
-       $("img").on("click",function(){
-           console.log($(this).attr('src'));
-           console.log($(this).attr("id"));
-           if($(this).attr('src') == urlStaticList[$(this).attr('id')] ){
-               console.log("entro a estatic");
-            $(this).attr('src',urlList[$(this).attr('id')]);
-         }else if($(this).attr('src') == urlList[$(this).attr('id')]){
-             console.log("entro a la gif");
-            $(this).attr('src',urlStaticList[$(this).attr('id')]);
-         }
-       }) 
-    }, 2000);
+    var time = () => {
+        setTimeout(function(){
+            $("img").on("click",function(){
+                console.log($(this).attr('src'));
+                console.log($(this).attr("id"));
+                if($(this).attr('src') == urlStaticList[$(this).attr('id')] ){
+                    console.log("entro a estatic");
+                 $(this).attr('src',urlList[$(this).attr('id')]);
+              }else if($(this).attr('src') == urlList[$(this).attr('id')]){
+                  console.log("entro a la gif");
+                 $(this).attr('src',urlStaticList[$(this).attr('id')]);
+              }
+            }) 
+         }, 2000);
+    }
+
+   
 
    
 });
