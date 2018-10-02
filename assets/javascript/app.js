@@ -22,37 +22,41 @@ $(function () {
         });
     }
     animalButton(animals);
+    // setlocalStorageAnimalList(animals);
     
-
-    $(".animalButtonClass").on('click', function () { 
-        time();  
-        urlList = []; 
-        urlStaticList = [];  
-        url = "";
-        urlStatic = ""; 
-        query = $(this).attr('id');
-        $(".imagesPosition").empty();
-            $.ajax({
-            url:  api + query  +   apiKey  +  limit,
-            method: "GET"
-        }).then(function (response) {
-            console.log(response.data);
-            response.data.forEach(function(element,index){
-               // console.log(index);
-              url = element.images.fixed_height.url;
-              urlList.push(element.images.fixed_height.url);
-              urlStatic = element.images.fixed_height_still.url;
-              urlStaticList.push(element.images.fixed_height_still.url);
-             console.log(url);
-             console.log(urlStatic);
-             imges = $("<img src=" + urlStatic + " id='"+index + "'" + ">");
-             $(".imagesPosition").append(imges);
-            
-            })
-           
-           
-        });
-    });
+   
+        $(".cont").on('click','.animalButtonClass', function () { 
+            console.log("estoy");
+            time();  
+            urlList = []; 
+            urlStaticList = [];  
+            url = "";
+            urlStatic = ""; 
+            query = $(this).attr('id');
+            $(".imagesPosition").empty();
+                $.ajax({
+                url:  api + query  +   apiKey  +  limit,
+                method: "GET"
+            }).then(function (response) {
+                console.log(response.data);
+                response.data.forEach(function(element,index){
+                   // console.log(index);
+                  url = element.images.fixed_height.url;
+                  urlList.push(element.images.fixed_height.url);
+                  urlStatic = element.images.fixed_height_still.url;
+                  urlStaticList.push(element.images.fixed_height_still.url);
+                 console.log(url);
+                 console.log(urlStatic);
+                 imges = $("<img src=" + urlStatic + " id='"+index + "'" + ">");
+                 $(".imagesPosition").append(imges);
+                
+                })
+               
+               
+            });
+        }); 
+    
+    
     var time = () => {
         setTimeout(function(){
             $("img").on("click",function(){
@@ -66,11 +70,48 @@ $(function () {
                  $(this).attr('src',urlStaticList[$(this).attr('id')]);
               }
             }) 
-         }, 2000);
+         }, 1000);
     }
 
-   
+    $("#add-animal").on('click',function(){
+        event.preventDefault();
+        
+      var animalAdded = $('#animal-input').val().toLowerCase();
+      if(animals.indexOf(animalAdded) == -1 && $('#animal-input').val().toLowerCase() != "" ){
+        animals.push(animalAdded);
+        
+      $('#buttonsPosition').empty();
+      animalButton(animals);
+      }
+     
+    });
 
+    // Delete Animal
+
+    $("#delete-animal").on('click',function(){
+        event.preventDefault();
+        var animalAdded = $('#animal-input').val().toLowerCase();
+        var myIndex = animals.indexOf(animalAdded);
+        if(myIndex != -1){
+            animals.splice(myIndex, 1);
+        }
+        
+        $('#buttonsPosition').empty();
+        animalButton(animals);
+    });
+   
+    var setlocalStorageAnimalList = (listOfAnimals) => {
+        localStorage.setItem('animalList', JSON.stringify(listOfAnimals));
+    }
+
+    var getLocalStorageAnimalList = () => {
+        var storedList = localStorage.getItem('animalList');
+        if(animalList == null){
+            storedList = [];
+        }else{
+            storedList = JSON.parse(animalList);
+        }
+    }
    
 });
 
